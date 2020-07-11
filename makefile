@@ -17,8 +17,8 @@ ASANFLAGS += -fno-omit-frame-pointer
 
 run:
 	@echo [ INFO ] Compiling... 
-	@$(CC) $(CFLAGS) src/*.c -o chip8.out $(LIBS)
-	@./chip8.out
+	@$(CC) $(CFLAGS) src/*.c -o build/chip8.out $(LIBS)
+	@./build/chip8.out
 
 .PHONY: clean
 clean:
