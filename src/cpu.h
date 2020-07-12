@@ -9,6 +9,8 @@
 #define NUM_REGISTERS 16
 #define DISPLAY_SIZE (64 * 32)
 
+typedef enum {false = 0, true = 1} bool;
+
 typedef struct {
     uint8_t memory[MAX_MEMORY];
     uint16_t current_opcode;
@@ -21,6 +23,7 @@ typedef struct {
     uint16_t stack[STACK_SIZE]; // 
     uint8_t key[NUM_KEYS];
     uint8_t display[DISPLAY_SIZE];
+    bool isRunning;
 } cpu_t;
 
 cpu_t cpu_create();

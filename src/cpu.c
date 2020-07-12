@@ -17,6 +17,7 @@ cpu_t cpu_create() {
     memset(cpu.stack, 0, STACK_SIZE - 1);
     memset(cpu.key, 0, NUM_KEYS);
     memset(cpu.display, 0, DISPLAY_SIZE);
+    cpu.isRunning = true;
 
     return cpu;
 }
