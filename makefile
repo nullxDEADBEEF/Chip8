@@ -17,10 +17,20 @@ ASANFLAGS += -fno-omit-frame-pointer
 INCLUDES = -I "lib\SDL2-2.0.12\i686-w64-mingw32\include"
 LINKING = -L "lib\SDL2-2.0.12\i686-w64-mingw32\lib"
 
-run:
-	@echo [ INFO ] Compiling... 
+ifeq (run,$(firstword $(MAKECMDGOALS)))
+  # use the rest as arguments for "run"
+  RUN_ARGS := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
+  # ...and turn them into do-nothing targets
+  $(eval $(RUN_ARGS):;@:)
+endif
+
+make:
+	@echo [ INFO ] Compiling...
+	@echo [ INFO ] Compilation DONE 
 	@$(CC) $(CFLAGS) src/*.c $(INCLUDES) $(LINKING) $(LIBS) -o build/chip8.out
-	@./build/chip8.out
+
+run:
+	@./build/chip8.out $(RUN_ARGS)
 
 .PHONY: clean
 clean:

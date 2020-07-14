@@ -3,7 +3,8 @@
 
 #include "cpu.h"
 
-int initialize_window();
-void handle_window_input(cpu_t *cpu);
+int window_create();
+void window_process_input(cpu_t *cpu);
+void window_render(cpu_t *cpu);
 
 #endif // MAIN_H
