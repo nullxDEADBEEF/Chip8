@@ -7,7 +7,9 @@
 #define STACK_SIZE 16
 #define NUM_KEYS 16
 #define NUM_REGISTERS 16
-#define DISPLAY_SIZE (64 * 32)
+#define DISPLAY_WIDTH 64
+#define DISPLAY_HEIGHT 32
+#define INSTRUCTION_SIZE_IN_BYTES 2
 
 typedef enum {false = 0, true = 1} bool;
 
@@ -22,13 +24,14 @@ typedef struct {
     uint8_t stack_pointer; // used to point to the topmost level in the stack
     uint16_t stack[STACK_SIZE];  
     uint8_t key[NUM_KEYS];
-    uint8_t display[DISPLAY_SIZE];
+    uint8_t display[DISPLAY_WIDTH * DISPLAY_HEIGHT];
     bool isRunning;
 } cpu_t;
 
 cpu_t cpu_create();
 void cpu_print_status(cpu_t *cpu);
-int cpu_load_rom(cpu_t *cpu, char *file_path);
-
+bool cpu_load_rom(cpu_t *cpu, char *file_path);
+uint16_t cpu_fetch_instruction(cpu_t *cpu);
+void cpu_decode_execute(cpu_t *cpu);
 
 #endif // CPU_H

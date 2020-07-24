@@ -1,4 +1,9 @@
-LIBS = -lmingw32 -lm -lSDL2main -lSDL2
+UNAME := $(shell uname)
+ifeq ($(UNAME), Darwin) 
+	LIBS = -lm -lSDL2main -lSDL2
+else
+	LIBS = -lmingw32 -lm -lSDL2main -lSDL2
+endif
 
 ###
 CC = gcc

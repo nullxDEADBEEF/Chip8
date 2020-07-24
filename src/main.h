@@ -3,7 +3,7 @@
 
 #include "cpu.h"
 
-int window_create();
+bool window_create();
 void window_process_input(cpu_t *cpu);
 void window_render(cpu_t *cpu);
 
