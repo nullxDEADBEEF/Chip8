@@ -2,6 +2,10 @@
 #define CPU_H
 
 #include <stdint.h>
+#include <stdlib.h>
+#include <time.h>
+#include <string.h>
+#include <assert.h>
 
 #define MAX_MEMORY 4096
 #define STACK_SIZE 16
@@ -25,7 +29,11 @@ typedef struct {
     uint16_t stack[STACK_SIZE];  
     uint8_t key[NUM_KEYS];
     uint8_t display[DISPLAY_WIDTH * DISPLAY_HEIGHT];
-    bool isRunning;
+    bool is_running;
+    // adding a should draw flag so that
+    // we only update when an instruction 
+    // touches the display
+    bool should_draw;
 } cpu_t;
 
 cpu_t cpu_create();

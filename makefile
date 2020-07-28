@@ -39,4 +39,4 @@ run:
 
 .PHONY: clean
 clean:
-	rm -rf *.o *.out *.out.dSYM
+	rm -rf build/*.o build/*.out build/*.out.dSYM
