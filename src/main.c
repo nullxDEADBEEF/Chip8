@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <windows.h>
 #include <SDL2/SDL.h>
 #include "main.h"
 #include "cpu.h"
@@ -17,13 +18,13 @@ bool window_create() {
         SDL_Quit();
         return false;
     }
+    
     window = SDL_CreateWindow("Chip-8 Intepreter",
                               SDL_WINDOWPOS_CENTERED,
                               SDL_WINDOWPOS_CENTERED,
                               WIDTH * (pixel_scale / 2),
                               HEIGHT * (pixel_scale / 2),
-                              SDL_WINDOW_OPENGL);
-    
+                              SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
     
     assert(window != NULL);
@@ -165,7 +166,6 @@ void window_render(cpu_t *cpu) {
         }
     }
     SDL_RenderPresent(renderer);
-    SDL_Delay(1);
 }
 
 int main(int argc, char* argv[]) {
@@ -188,6 +188,7 @@ int main(int argc, char* argv[]) {
         if (cpu.should_draw) {
             window_render(&cpu);
         }
+        
         SDL_Delay(2);
     }
     

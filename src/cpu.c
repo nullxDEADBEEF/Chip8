@@ -85,13 +85,13 @@ void cpu_decode_execute(cpu_t *cpu) {
     cpu->current_opcode = cpu_fetch_instruction(cpu);
     
     if (cpu->delay_timer > 0) {
-        --cpu->delay_timer;
+        cpu->delay_timer--;
     }
     if (cpu->sound_timer > 0) {
         if (cpu->sound_timer == 1) {
             printf("insert beep sound here!\n");
         }
-        --cpu->sound_timer;
+        cpu->sound_timer--;
     }
     
     // get first 4 bits
@@ -183,11 +183,7 @@ void cpu_decode_execute(cpu_t *cpu) {
             case 0x0004:
             cpu->V[REGISTER_X_NIBBLE(cpu->current_opcode)] += cpu->V[REGISTER_Y_NIBBLE(cpu->current_opcode)];
             // checking if the addition made an overflow of the 8 bits
-            if (cpu->V[REGISTER_X_NIBBLE(cpu->current_opcode)] > 0x00FF) {
-                cpu->V[0x000F] = 1;
-            } else {
-                cpu->V[0x000F] = 0;
-            }
+            cpu->V[0x000F] = (cpu->V[REGISTER_X_NIBBLE(cpu->current_opcode)] > 0x00FF) ? 1 : 0;
             break; 
             
             // 0x8XY5 -> substract the value of register VY from register VX
@@ -195,11 +191,7 @@ void cpu_decode_execute(cpu_t *cpu) {
             // set VF to 01 if a borrow does not happen
             case 0x0005:
             cpu->V[REGISTER_X_NIBBLE(cpu->current_opcode)] -= cpu->V[REGISTER_Y_NIBBLE(cpu->current_opcode)];
-            if (cpu->V[REGISTER_X_NIBBLE(cpu->current_opcode)] > cpu->V[REGISTER_Y_NIBBLE(cpu->current_opcode)]) {
-                cpu->V[0x000F] = 1;
-            } else {
-                cpu->V[0x000F] = 0;
-            }
+            cpu->V[0x000F] = (cpu->V[REGISTER_X_NIBBLE(cpu->current_opcode)] > cpu->V[REGISTER_Y_NIBBLE(cpu->current_opcode)]) ? 0 : 1;
             break;
             
             // 0x8XY6 -> store the value of register VY shifted right one bit in register VX
@@ -214,11 +206,7 @@ void cpu_decode_execute(cpu_t *cpu) {
             // set VF to 01 if a borrow does not happen
             case 0x0007:
             cpu->V[REGISTER_X_NIBBLE(cpu->current_opcode)] = cpu->V[REGISTER_Y_NIBBLE(cpu->current_opcode)] - cpu->V[REGISTER_X_NIBBLE(cpu->current_opcode)];
-            if (cpu->V[REGISTER_Y_NIBBLE(cpu->current_opcode)] > cpu->V[REGISTER_X_NIBBLE(cpu->current_opcode)]) {
-                cpu->V[0x000F] = 1;
-            } else {
-                cpu->V[0x000F] = 0;
-            }
+            cpu->V[0x000F] = (cpu->V[REGISTER_Y_NIBBLE(cpu->current_opcode)] > cpu->V[REGISTER_X_NIBBLE(cpu->current_opcode)]) ? 0 : 1;
             break;
             
             // 0x8XYE -> store the value of register VY shifted left one bit in register VX
@@ -320,7 +308,7 @@ void cpu_decode_execute(cpu_t *cpu) {
             case 0x000A:
             for (int i = 0; i < NUM_KEYS; i++) {
                 if (cpu->key[i] == 1) {
-                    cpu->V[REGISTER_X_NIBBLE(cpu->current_opcode)] = cpu->key[i];
+                    cpu->V[REGISTER_X_NIBBLE(cpu->current_opcode)] = i;
                     return;
                 }
             }
@@ -340,11 +328,7 @@ void cpu_decode_execute(cpu_t *cpu) {
             // 0xFX1E -> add the value stored in register VX to register I
             case 0x001E:
             cpu->I += cpu->V[REGISTER_X_NIBBLE(cpu->current_opcode)];
-            if (cpu->I > 0x0FFF) {
-                cpu->V[0x000F] = 1;
-            } else {
-                cpu->V[0x000F] = 0;
-            }
+            cpu->V[0x000F] = (cpu->I > 0x0FFF) ? 1 : 0;
             break;
             
             // 0xFX29 -> set I to the memory address of the sprite data
